@@ -109,7 +109,7 @@ const Order = () => {
                 <button
                   key={section}
                   onClick={() => scrollToSection(section)}
-                  className="w-full text-left px-4 py-3 text-sm text-neutral-800 hover:bg-neutral-50 transition"
+                  className="w-full text-left px-4 py-3 text-sm text-neutral-800 hover:bg-neutral-50 transition-colors cursor-pointer"
                 >
                   {section}
                 </button>
@@ -120,8 +120,12 @@ const Order = () => {
           {/* MIDDLE: items */}
           <main className="space-y-6">
             {sectionNames.map((section) => (
-              <div key={section} id={`section-${section.replace(/\s+/g, "-")}`}>
-                <div className="rounded-t-2xl bg-[#CFA878] text-center py-2">
+              <div
+                key={section}
+                id={`section-${section.replace(/\s+/g, "-")}`}
+                className="transition-transform duration-200 hover:-translate-y-[1px]"
+              >
+                <div className="rounded-t-2xl bg-[#CFA878] text-center py-2 shadow-sm">
                   <h2 className="text-sm md:text-base font-semibold text-white tracking-[0.18em] uppercase">
                     {section}
                   </h2>
@@ -138,7 +142,7 @@ const Order = () => {
                     return (
                       <div
                         key={key}
-                        className="flex items-center gap-4 px-4 py-3 md:px-5 md:py-4"
+                        className="flex items-center gap-4 px-4 py-3 md:px-5 md:py-4 hover:bg-neutral-50/70 transition-colors"
                       >
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between gap-3">
@@ -161,27 +165,49 @@ const Order = () => {
 
                         {/* qty controls */}
                         <div className="flex flex-col items-center gap-1">
-                          <div className="inline-flex items-center rounded-full border border-neutral-300 bg-white px-2 py-1">
+                          <div className="inline-flex items-center rounded-full border border-neutral-300 bg-white px-3 py-1.5 shadow-sm">
+                            {/* Minus */}
                             <button
                               type="button"
                               onClick={() => removeItem(key)}
                               disabled={qty === 0}
-                              className="p-1 disabled:opacity-40 disabled:cursor-not-allowed hover:text-[#1E2B4F]"
+                              className="p-1.5 rounded-full cursor-pointer transition-all 
+      disabled:opacity-40 disabled:cursor-not-allowed 
+      hover:bg-neutral-100 active:bg-neutral-200"
                             >
-                              <Minus className="h-4 w-4" />
+                              <Minus
+                                className={`h-4 w-4 ${
+                                  qty === 0
+                                    ? "text-neutral-400"
+                                    : "text-neutral-700"
+                                }`}
+                              />
                             </button>
-                            <span className="mx-2 w-5 text-center text-sm font-medium text-neutral-800">
+
+                            {/* Quantity Number */}
+                            <span className="mx-3 w-6 text-center text-sm font-semibold text-neutral-900">
                               {qty}
                             </span>
+
+                            {/* Plus */}
                             <button
                               type="button"
                               onClick={() => addItem(item)}
                               disabled={!item.isAvailable}
-                              className="p-1 disabled:opacity-40 disabled:cursor-not-allowed hover:text-[#1E2B4F]"
+                              className="p-1.5 rounded-full cursor-pointer transition-all 
+      disabled:opacity-40 disabled:cursor-not-allowed 
+      hover:bg-neutral-100 active:bg-neutral-200"
                             >
-                              <Plus className="h-4 w-4" />
+                              <Plus
+                                className={`h-4 w-4 ${
+                                  item.isAvailable
+                                    ? "text-neutral-700"
+                                    : "text-neutral-400"
+                                }`}
+                              />
                             </button>
                           </div>
+
                           {!item.isAvailable && (
                             <span className="mt-1 text-[10px] font-medium text-red-600">
                               Unavailable
@@ -235,7 +261,7 @@ const Order = () => {
                       <button
                         type="button"
                         onClick={() => removeLine(ci.menuItemId)}
-                        className="p-1 text-neutral-400 hover:text-red-500"
+                        className="p-1 rounded-full text-neutral-400 hover:text-red-500 hover:bg-red-50 cursor-pointer transition-colors"
                         aria-label="Remove item"
                       >
                         <Trash2 className="h-4 w-4" />
@@ -257,7 +283,7 @@ const Order = () => {
                 type="button"
                 disabled={total === 0}
                 onClick={checkout}
-                className="w-full rounded-full bg-[#1E2B4F] py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#263567] disabled:opacity-60 disabled:cursor-not-allowed transition"
+                className="w-full rounded-full bg-[#1E2B4F] py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#263567] disabled:opacity-60 disabled:cursor-not-allowed transition-colors cursor-pointer"
               >
                 Checkout
               </button>
