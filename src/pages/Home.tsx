@@ -15,11 +15,13 @@ export default function Home() {
         image="/assets/og/og-home.jpg"
       />
 
+      {/* Journey Timeline section */}
+      <JourneyTimeline />
+
       {/* Hero section */}
       <Hero />
 
-      {/* Journey Timeline section */}
-      <JourneyTimeline />
+      
 
       {/* Menu Highlights section */}
       <MenuHighlights />
