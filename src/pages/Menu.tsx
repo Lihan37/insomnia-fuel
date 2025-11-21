@@ -16,6 +16,14 @@ const tabs: { id: TabId; label: string }[] = [
   { id: "other", label: "Other" },
 ];
 
+// helper to make "HEALTHYBOWLS" → "HEALTHY BOWLS"
+const prettySection = (label: string) =>
+  label
+    .replace(/([a-z])([A-Z])/g, "$1 $2")   // add space between camelCase
+    .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2") // add space between ALLCAPS words
+    .trim();
+
+
 export default function Menu() {
   const [items, setItems] = useState<IMenuItem[]>([]);
   const [activeTab, setActiveTab] = useState<TabId>("all");
@@ -62,7 +70,6 @@ export default function Menu() {
       <div className="max-w-6xl mx-auto px-4 py-14 md:py-20">
         {/* Hero / Intro block */}
         <div className="flex flex-col items-center text-center mb-10 md:mb-14 space-y-6">
-          {/* Floating coffee icon */}
           <div className="inline-flex items-center justify-center rounded-full border border-amber-200 bg-white/80 px-5 py-2 shadow-sm backdrop-blur-sm transition-transform duration-500 hover:-translate-y-0.5">
             <span className="text-xl mr-2">☕</span>
             <span className="text-xs tracking-[0.25em] uppercase text-[#6B4A2F]">
@@ -70,14 +77,12 @@ export default function Menu() {
             </span>
           </div>
 
-          {/* Copy like your reference image */}
           <p className="max-w-3xl text-lg md:text-2xl font-serif text-[#1E2B4F] leading-relaxed">
             Experience bold flavours and comforting classics, designed to keep
             late nights, early mornings and everything in between deliciously
             fuelled.
           </p>
 
-          {/* Divider with icon */}
           <div className="flex items-center w-full max-w-3xl">
             <span className="flex-1 h-px bg-gradient-to-r from-transparent via-amber-200 to-amber-400" />
             <span className="mx-3 text-2xl md:text-3xl transition-transform duration-700 hover:rotate-6">
@@ -86,7 +91,6 @@ export default function Menu() {
             <span className="flex-1 h-px bg-gradient-to-l from-transparent via-amber-200 to-amber-400" />
           </div>
 
-          {/* Big title */}
           <h1 className="text-3xl md:text-5xl font-serif text-[#3B2416] tracking-wide">
             Our All-Day Menu
           </h1>
@@ -137,84 +141,90 @@ export default function Menu() {
           </div>
         ) : (
           <div className="space-y-10 md:space-y-12">
-            {Object.entries(groupedBySection).map(([section, sectionItems], i) => (
-              <div
-                key={section}
-                className="animate-[fadeInUp_0.6s_ease-out_forwards]"
-                style={{ animationDelay: `${i * 120}ms` as string }}
-              >
-                {/* Section heading */}
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <span className="text-lg">✶</span>
-                    <h2 className="text-xs md:text-sm tracking-[0.25em] uppercase text-[#6B4A2F]">
-                      {section}
-                    </h2>
+            {Object.entries(groupedBySection).map(
+              ([section, sectionItems], i) => (
+                <div
+                  key={section}
+                  className="opacity-0 translate-y-3 animate-[sectionIn_0.6s_ease-out_forwards]"
+                  style={{ animationDelay: `${i * 120}ms` }}
+                >
+                  {/* Premium Section Heading */}
+                  <div className="mb-8">
+                    <div className="flex items-center gap-3">
+                      <span className="h-3 w-3 rounded-full bg-amber-500 shadow-[0_0_0_4px_rgba(251,191,36,0.4)]" />
+                      <h2 className="text-xl md:text-2xl font-bold text-[#2B1B10]">
+                        {prettySection(section)}
+                      </h2>
+                    </div>
+                    <div className="mt-2 h-[2px] w-full bg-gradient-to-r from-amber-300/60 to-transparent" />
+                  </div>
+
+                  {/* Cards grid */}
+                  <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+                    {sectionItems.map((item, idx) => (
+                      <article
+                        key={item._id ?? `${item.name}-${idx}`}
+                        className="opacity-0 translate-y-2 animate-[cardIn_0.45s_ease-out_forwards] group flex flex-col rounded-3xl border border-amber-100 bg-white/90 p-5 md:p-6 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                        style={{ animationDelay: `${i * 120 + idx * 60}ms` }}
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <h3 className="text-[15px] md:text-[16px] font-semibold text-[#1E2B4F] leading-snug">
+                              {item.name}
+                            </h3>
+
+                            {item.description && (
+                              <p className="mt-2 text-[13px] md:text-sm text-neutral-700 leading-relaxed">
+                                {item.description}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="flex flex-col items-end gap-1">
+                            <span className="inline-flex items-baseline gap-0.5 text-[15px] md:text-base font-semibold text-[#3B2416]">
+                              <span className="text-[11px] md:text-xs align-super">
+                                $
+                              </span>
+                              {item.price.toFixed(2)}
+                            </span>
+
+                            {item.isFeatured && (
+                              <span className="inline-flex items-center gap-1 rounded-full bg-amber-100/90 px-2 py-0.5 text-[10px] font-medium text-amber-800 shadow-[0_0_0_1px_rgba(251,191,36,0.4)]">
+                                <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
+                                Signature
+                              </span>
+                            )}
+
+                            {!item.isAvailable && (
+                              <span className="inline-flex rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-medium text-red-700">
+                                Unavailable
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="mt-4 flex items-center justify-between">
+                          <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-[10px] uppercase tracking-wide text-amber-800">
+                            {item.category}
+                          </span>
+                          <span className="text-[10px] text-neutral-400 group-hover:text-neutral-600 transition-colors">
+                            Served all day · Fresh
+                          </span>
+                        </div>
+                      </article>
+                    ))}
                   </div>
                 </div>
-
-                {/* Cards grid */}
-                <div className="grid gap-4 md:gap-5 sm:grid-cols-2">
-                  {sectionItems.map((item, idx) => (
-                    <article
-                      key={item._id ?? `${item.name}-${idx}`}
-                      className="group flex flex-col rounded-3xl border border-amber-100 bg-white/80 p-5 md:p-6 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div>
-                          <h3 className="text-sm md:text-base font-semibold text-[#1E2B4F] leading-snug">
-                            {item.name}
-                          </h3>
-
-                          <p className="mt-2 text-xs md:text-sm text-neutral-700 leading-relaxed">
-                            {item.description}
-                          </p>
-                        </div>
-
-                        <div className="flex flex-col items-end gap-1">
-                          <span className="inline-flex items-baseline gap-0.5 text-sm md:text-base font-semibold text-[#3B2416]">
-                            <span className="text-[11px] md:text-xs align-super">
-                              $
-                            </span>
-                            {item.price.toFixed(2)}
-                          </span>
-
-                          {item.isFeatured && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-amber-100/90 px-2 py-0.5 text-[10px] font-medium text-amber-800 shadow-[0_0_0_1px_rgba(251,191,36,0.4)]">
-                              <Star className="h-3 w-3 fill-amber-500 text-amber-500" />
-                              Signature
-                            </span>
-                          )}
-
-                          {!item.isAvailable && (
-                            <span className="inline-flex rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-medium text-red-700">
-                              Unavailable
-                            </span>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Footer */}
-                      <div className="mt-4 flex items-center justify-between">
-                        <span className="rounded-full bg-amber-50 px-2.5 py-0.5 text-[10px] uppercase tracking-wide text-amber-800">
-                          {item.category}
-                        </span>
-                        <span className="text-[10px] text-neutral-400 group-hover:text-neutral-600 transition-colors">
-                          Served all day · Fresh
-                        </span>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
         )}
       </div>
 
-      {/* simple keyframes for fade in (Tailwind doesn't know but CSS will) */}
+      {/* keyframes for animations */}
       <style>{`
-        @keyframes fadeInUp {
+        @keyframes sectionIn {
           from {
             opacity: 0;
             transform: translateY(8px);
@@ -222,6 +232,16 @@ export default function Menu() {
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+        @keyframes cardIn {
+          from {
+            opacity: 0;
+            transform: translateY(6px) scale(0.98);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
           }
         }
       `}</style>
