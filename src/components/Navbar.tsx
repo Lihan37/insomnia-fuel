@@ -69,7 +69,7 @@ export default function Navbar() {
                   to="/admin"
                   className={`${linkClass} whitespace-nowrap`}
                 >
-                  🛠️ Admin
+                  Admin
                 </NavLink>
               )}
               {isClient && (
@@ -77,7 +77,7 @@ export default function Navbar() {
                   to="/dashboard"
                   className={`${linkClass} whitespace-nowrap`}
                 >
-                  📊 Activity
+                  Activity
                 </NavLink>
               )}
             </nav>

@@ -1,0 +1,9 @@
+Stripe Live Readiness Checklist
+
+- Frontend uses server-side Checkout only; live vs test is controlled by backend secret key and session creation.
+- Update deployment env vars: VITE_API_URL to your prod API host, VITE_STRIPE_PUBLISHABLE_KEY to pk_live..., backend STRIPE_SECRET_KEY to sk_live..., and webhook secret to the live one.
+- Ensure backend success/cancel URLs use your real domain (e.g. https://yourdomain.com/checkout/success?session_id={CHECKOUT_SESSION_ID}).
+- Expose GET /api/orders/{sessionId} on your prod API over HTTPS and have it verify sessions with the live secret before marking orders paid.
+- Configure a live-mode Stripe webhook endpoint; test secrets won’t receive live events.
+- Don’t commit live keys; set them as deployment env vars.
+- Run a small live payment end-to-end to confirm redirect and order recording.

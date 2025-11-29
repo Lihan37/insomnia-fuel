@@ -1,14 +1,16 @@
+// src/components/MobileMenu.tsx
 import { Link } from "react-router-dom";
 import { X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 interface MobileMenuProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
 
-const navLinks = [
+const baseLinks = [
   { to: "/menu", label: "Menu" },
   { to: "/catering", label: "Catering" },
   { to: "/gallery", label: "Gallery" },
@@ -16,12 +18,20 @@ const navLinks = [
 ];
 
 export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
+  const { user, isAdmin, isClient, logout } = useAuth();
+
+  // Same order logic as Navbar
+  const orderTo = user ? "/order" : "/register";
+  const orderState = user ? undefined : { next: "/order" };
+
   // Lock body scroll when menu is open
   useEffect(() => {
     if (open) {
       const prev = document.body.style.overflow;
       document.body.style.overflow = "hidden";
-      return () => { document.body.style.overflow = prev; };
+      return () => {
+        document.body.style.overflow = prev;
+      };
     }
   }, [open]);
 
@@ -35,7 +45,6 @@ export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          // HIGH z-index so nothing bleeds through
           className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-sm"
           onClick={() => setOpen(false)}
         >
@@ -49,7 +58,9 @@ export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-800">
-              <h2 className="text-lg font-semibold text-white tracking-wide">Menu</h2>
+              <h2 className="text-lg font-semibold text-white tracking-wide">
+                Menu
+              </h2>
               <button
                 onClick={() => setOpen(false)}
                 className="text-gray-400 hover:text-orange-400 transition"
@@ -59,9 +70,9 @@ export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
               </button>
             </div>
 
-            {/* Links */}
-            <nav className="flex-1 flex flex-col justify-center space-y-6 px-8 text-center">
-              {navLinks.map((link) => (
+            {/* Links (same as Navbar + role-based) */}
+            <nav className="flex-1 flex flex-col justify-center space-y-5 px-8 text-center">
+              {baseLinks.map((link) => (
                 <Link
                   key={link.to}
                   to={link.to}
@@ -72,11 +83,62 @@ export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
                   <span className="pointer-events-none absolute -bottom-1 left-1/2 w-0 h-[2px] bg-orange-400 transition-all group-hover:w-full group-hover:left-0" />
                 </Link>
               ))}
+
+              {isAdmin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setOpen(false)}
+                  className="text-lg font-medium tracking-wide hover:text-orange-400 transition"
+                >
+                  Admin
+                </Link>
+              )}
+
+              {isClient && (
+                <Link
+                  to="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="text-lg font-medium tracking-wide hover:text-orange-400 transition"
+                >
+                  Activity
+                </Link>
+              )}
             </nav>
 
-            {/* Footer */}
-            <div className="text-xs text-center text-gray-500 pb-6">
-              © {new Date().getFullYear()} Insomnia Fuel
+            {/* CTA + Auth actions (match Navbar order) */}
+            <div className="px-6 pb-6 space-y-3 border-t border-gray-800">
+              <Link
+                to={orderTo}
+                state={orderState}
+                onClick={() => setOpen(false)}
+                className="block w-full rounded-full bg-[#350404] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:shadow-md hover:bg-[#790808] transition text-center"
+              >
+                Order Online
+              </Link>
+
+              {!user ? (
+                <Link
+                  to="/login"
+                  onClick={() => setOpen(false)}
+                  className="block w-full text-sm font-medium text-gray-300 hover:text-orange-400 text-center"
+                >
+                  Log in
+                </Link>
+              ) : (
+                <button
+                  onClick={() => {
+                    logout();
+                    setOpen(false);
+                  }}
+                  className="block w-full text-sm font-medium text-gray-300 hover:text-orange-400 text-center"
+                >
+                  Logout
+                </button>
+              )}
+
+              <p className="text-[11px] text-center text-gray-500 pt-2">
+                © {new Date().getFullYear()} Insomnia Fuel
+              </p>
             </div>
           </motion.aside>
         </motion.div>
