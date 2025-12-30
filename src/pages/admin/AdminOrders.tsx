@@ -179,7 +179,9 @@ export default function AdminOrders() {
 
       if (created >= todayStart) {
         totalToday += 1;
-        revenueToday += amount;
+        if (o.status !== "cancelled" && o.paymentStatus === "paid") {
+          revenueToday += amount;
+        }
       }
 
       if (o.status === "pending") pending += 1;
@@ -323,6 +325,56 @@ const handleStatusChange = async (
   }
 };
 
+  const handlePaymentStatusChange = async (
+    orderId: string,
+    paymentStatus: "paid" | "unpaid"
+  ) => {
+    if (!user) return;
+
+    try {
+      const result = await Swal.fire({
+        icon: "question",
+        title: "Mark as paid?",
+        text: "This will record that the customer paid at the counter.",
+        showCancelButton: true,
+        confirmButtonText: "Yes, mark paid",
+        cancelButtonText: "No, go back",
+        confirmButtonColor: "#1E2B4F",
+        cancelButtonColor: "#888",
+        background: "#fff",
+      });
+
+      if (!result.isConfirmed) return;
+
+      const token = await user.getIdToken();
+      await api.put(
+        `/api/orders/${orderId}`,
+        { paymentStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setOrders((prev) =>
+        prev.map((o) =>
+          o._id === orderId ? { ...o, paymentStatus } : o
+        )
+      );
+
+      Swal.fire({
+        icon: "success",
+        title: "Payment updated",
+        timer: 1200,
+        showConfirmButton: false,
+      });
+    } catch (error) {
+      console.error("Failed to update payment", error);
+      Swal.fire({
+        icon: "error",
+        title: "Update failed",
+        text: "Failed to update payment status. Try again.",
+      });
+    }
+  };
+
 
   const downloadInvoice = (order: IOrder) => {
     const amount =
@@ -419,6 +471,11 @@ const handleStatusChange = async (
             <div style="text-align:right;">
               <strong>Status:</strong> ${
                 order.status
+              }<br />
+              <strong>Payment:</strong> ${
+                order.paymentStatus === "paid"
+                  ? "Paid at counter"
+                  : "Pay at counter"
               }<br />
               <strong>Items:</strong> ${order.items.reduce(
                 (sum, it) => sum + it.quantity,
@@ -689,6 +746,7 @@ const handleStatusChange = async (
                   typeof order.total === "number"
                     ? order.total
                     : order.subtotal ?? 0;
+                const isPaid = order.paymentStatus === "paid";
 
                 return (
                   <div
@@ -745,6 +803,33 @@ const handleStatusChange = async (
                             <div className="text-sm font-semibold text-[#1E2B4F]">
                               ${amount.toFixed(2)}
                             </div>
+                          </div>
+
+                          <div className="flex flex-col items-end gap-1">
+                            <span
+                              className={[
+                                "inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-medium",
+                                isPaid
+                                  ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                  : "bg-amber-50 text-amber-800 border-amber-200",
+                              ].join(" ")}
+                            >
+                              {isPaid ? "Paid at counter" : "Pay at counter"}
+                            </span>
+                            {!isPaid && (
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handlePaymentStatusChange(
+                                    order._id,
+                                    "paid"
+                                  )
+                                }
+                                className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] text-neutral-700 hover:bg-neutral-50 cursor-pointer"
+                              >
+                                Mark paid
+                              </button>
+                            )}
                           </div>
 
                           <select

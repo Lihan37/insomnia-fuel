@@ -81,7 +81,7 @@ export default function OrderDetails() {
 
         let targetId = orderId;
 
-        // If no id provided (e.g. from checkout success), fall back to latest order
+        // If no id provided (e.g. from order confirmation), fall back to latest order
         if (!targetId) {
           const res = await api.get<{ orders?: IOrder[] }>("/api/orders/my");
           const latest = res.data.orders?.[0]?._id;
@@ -209,15 +209,14 @@ export default function OrderDetails() {
               </span>
               <div>
                 <p className="text-xs uppercase tracking-wide text-neutral-500">
-                  Total Paid
+                  Total Due
                 </p>
                 <p className="text-2xl font-bold text-[#3A2C20]">
                   ${order.total.toFixed(2)}
                 </p>
                 <p className="text-xs text-neutral-500">
-                  {order.currency?.toUpperCase() || "AUD"} •{" "}
-                  {(order.paymentStatus || "paid").toUpperCase()}
-                </p>
+  {order.currency?.toUpperCase() || "AUD"} - Pay at counter
+</p>
               </div>
             </div>
           </div>
@@ -257,9 +256,9 @@ export default function OrderDetails() {
                     Payment
                   </p>
                   <p className="text-base font-semibold text-[#3A2C20]">
-                    {order.paymentStatus === "unpaid"
-                      ? "Awaiting payment"
-                      : "Paid in full"}
+                    {order.paymentStatus === "paid"
+                      ? "Paid at counter"
+                      : "Pay at counter"}
                   </p>
                 </div>
               </div>

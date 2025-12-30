@@ -19,7 +19,7 @@ import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminMenu from "@/pages/admin/AdminMenu";
 import AdminOrders from "@/pages/admin/AdminOrders";
 import AdminMessages from "@/pages/admin/AdminMessages";   // dY`^ NEW
-import CheckoutSuccess from "@/pages/CheckoutSuccess";
+import OrderPlaced from "@/pages/OrderPlaced";
 import MyOrders from "@/pages/dashboard/MyOrders";
 import OrderDetails from "@/pages/dashboard/OrderDetails";
 
@@ -37,10 +37,6 @@ export const router = createBrowserRouter([
       { path: "/register", element: <Register /> },
       { path: "/login", element: <Login /> },
       {
-        path: "/checkout/success",
-        element: <CheckoutSuccess />,
-      },
-      {
         path: "/dashboard/my-orders",
         element: <MyOrders />,
       },
@@ -48,6 +44,7 @@ export const router = createBrowserRouter([
         element: <RequireAuth />,
         children: [
           { path: "/order", element: <Order /> },
+          { path: "/order/placed", element: <OrderPlaced /> },
           { path: "/dashboard", element: <UserDashboard /> },
           { path: "/dashboard/order", element: <OrderDetails /> },
           { path: "/dashboard/order/:orderId", element: <OrderDetails /> },

@@ -78,7 +78,7 @@ const Order = () => {
     removeItem,
     removeLine,
     total,
-    checkout,
+    placeOrder,
   } = useCart();
 
   useEffect(() => {
@@ -440,12 +440,15 @@ const Order = () => {
                 </div>
 
                 <button
-                  onClick={checkout}
+                  onClick={placeOrder}
                   disabled={total === 0}
                   className="w-full rounded-full bg-[#1E2B4F] py-2.5 text-sm font-semibold text-white hover:bg-[#263567] disabled:opacity-60"
                 >
-                  Checkout
+                  Place order
                 </button>
+                <p className="text-[11px] text-neutral-500 text-center">
+                  Pay at the cafe when you collect your order.
+                </p>
               </div>
             </aside>
           </div>

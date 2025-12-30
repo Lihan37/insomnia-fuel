@@ -31,7 +31,6 @@ export interface IOrder {
 
   status: OrderStatus;
   paymentStatus: PaymentStatus;
-  stripeSessionId: string;
 
   createdAt: string;
   updatedAt: string;

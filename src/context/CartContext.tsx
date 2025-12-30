@@ -30,7 +30,7 @@ type CartContextValue = {
   /** remove the whole line, regardless of quantity */
   removeLine: (menuItemId: string) => Promise<void>;
   clear: () => Promise<void>;
-  checkout: () => Promise<void>;
+  placeOrder: () => Promise<void>;
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -216,9 +216,9 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   // CartContext.tsx – inside CartProvider
 
-  const checkout = async () => {
+  const placeOrder = async () => {
     if (!user) {
-      alert("Please sign in to checkout.");
+      alert("Please sign in to place an order.");
       return;
     }
     if (items.length === 0) {
@@ -227,17 +227,35 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const res = await api.post<{ url: string }>(
-        "/api/checkout/create-session"
-      );
-      if (res.data?.url) {
-        window.location.href = res.data.url; // redirect to Stripe Checkout
+      const res = await api.post<{
+        orderId?: string;
+        order?: { _id?: string };
+      }>("/api/orders", {
+        items,
+      });
+      const orderId = res.data?.order?._id ?? res.data?.orderId ?? null;
+
+      try {
+        await api.delete<CartApiResponse>("/api/cart");
+      } catch (err) {
+        console.error("Failed to clear cart after order:", err);
+      }
+
+      setItems([]);
+      if (typeof window !== "undefined") {
+        window.localStorage.removeItem(GUEST_STORAGE_KEY);
+      }
+
+      if (orderId) {
+        window.location.href = `/order/placed?orderId=${encodeURIComponent(
+          orderId
+        )}`;
       } else {
-        alert("Failed to start checkout. Please try again.");
+        window.location.href = "/order/placed";
       }
     } catch (err) {
-      console.error("Error starting Stripe checkout", err);
-      alert("Failed to start checkout. Please try again.");
+      console.error("Error placing order", err);
+      alert("Failed to place your order. Please try again.");
     }
   };
 
@@ -248,7 +266,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     removeItem,
     removeLine,
     clear,
-    checkout,
+    placeOrder,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
