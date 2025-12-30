@@ -79,13 +79,13 @@ export default function OrderDetails() {
         setLoading(true);
         setErr(null);
 
-        let targetId = orderId;
+        let targetId: string | undefined = orderId;
 
         // If no id provided (e.g. from order confirmation), fall back to latest order
         if (!targetId) {
           const res = await api.get<{ orders?: IOrder[] }>("/api/orders/my");
           const latest = res.data.orders?.[0]?._id;
-          targetId = latest || null;
+          targetId = latest || undefined;
         }
 
         if (!targetId) {
