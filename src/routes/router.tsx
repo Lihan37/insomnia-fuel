@@ -18,9 +18,10 @@ import AdminUsers from "@/pages/admin/AdminUsers";
 import AdminLayout from "@/pages/admin/AdminLayout";
 import AdminMenu from "@/pages/admin/AdminMenu";
 import AdminOrders from "@/pages/admin/AdminOrders";
-import AdminMessages from "@/pages/admin/AdminMessages";   // 👈 NEW
+import AdminMessages from "@/pages/admin/AdminMessages";   // dY`^ NEW
 import CheckoutSuccess from "@/pages/CheckoutSuccess";
 import MyOrders from "@/pages/dashboard/MyOrders";
+import OrderDetails from "@/pages/dashboard/OrderDetails";
 
 export const router = createBrowserRouter([
   // Public + customer area (with Main nav)
@@ -48,6 +49,8 @@ export const router = createBrowserRouter([
         children: [
           { path: "/order", element: <Order /> },
           { path: "/dashboard", element: <UserDashboard /> },
+          { path: "/dashboard/order", element: <OrderDetails /> },
+          { path: "/dashboard/order/:orderId", element: <OrderDetails /> },
         ],
       },
     ],
@@ -65,7 +68,7 @@ export const router = createBrowserRouter([
           { path: "users", element: <AdminUsers /> },
           { path: "orders", element: <AdminOrders /> },
           { path: "menu", element: <AdminMenu /> },
-          { path: "messages", element: <AdminMessages /> }, // 👈 NEW
+          { path: "messages", element: <AdminMessages /> }, // dY`^ NEW
         ],
       },
     ],
