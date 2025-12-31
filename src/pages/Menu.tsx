@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import type { IMenuItem, MenuCategory } from "@/types/menu";
 import { Loader2, Star } from "lucide-react";
+import SEO from "@/components/SEO";
 
 type TabId = "all" | MenuCategory;
 
@@ -99,6 +100,11 @@ export default function Menu() {
 
   return (
     <section className="bg-[#FFF7EC]">
+      <SEO
+        title="Menu"
+        description="Explore the all-day menu at Insomnia Fuel in Parramatta: burgers, coffee, breakfast, wraps, and shakes."
+        image="/logo.png"
+      />
       <div className="max-w-6xl mx-auto px-4 py-14 md:py-20">
         {/* Hero */}
         <div className="flex flex-col items-center text-center mb-10 md:mb-14 space-y-6">

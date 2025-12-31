@@ -3,6 +3,7 @@ import { useState } from "react";
 import Swal from "sweetalert2";
 import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
+import SEO from "@/components/SEO";
 
 export default function Contact() {
   const { user } = useAuth();
@@ -60,6 +61,11 @@ export default function Contact() {
 
   return (
     <section className="relative py-20 overflow-hidden text-[#1E1E1E]">
+      <SEO
+        title="Contact"
+        description="Find Insomnia Fuel in Parramatta. Get directions, opening hours, and contact the cafe."
+        image="/logo.png"
+      />
       {/* Subtle warm background tint */}
       <div
         aria-hidden
