@@ -6,11 +6,11 @@ import logo from "../assets/logo.png";
 import MobileMenu from "./MobileMenu";
 import { useAuth } from "@/context/AuthContext";
 
-type NavLinkItem = { to: string; label: string };
+type NavLinkItem = { to: string; label: string; hidden?: boolean };
 
 const links: NavLinkItem[] = [
   { to: "/menu", label: "Menu" },
-  { to: "/catering", label: "Catering" },
+  { to: "/catering", label: "Catering", hidden: true },
   { to: "/gallery", label: "Gallery" },
   { to: "/contact", label: "Contact" },
 ];
@@ -57,11 +57,13 @@ export default function Navbar() {
 
             {/* Center links */}
             <nav className="hidden md:flex items-center justify-center gap-8 text-base font-medium">
-              {links.map((l) => (
-                <NavLink key={l.to} to={l.to} className={linkClass}>
-                  {l.label}
-                </NavLink>
-              ))}
+              {links
+                .filter((l) => !l.hidden)
+                .map((l) => (
+                  <NavLink key={l.to} to={l.to} className={linkClass}>
+                    {l.label}
+                  </NavLink>
+                ))}
 
               {/* Role-based dashboard links */}
               {isAdmin && (

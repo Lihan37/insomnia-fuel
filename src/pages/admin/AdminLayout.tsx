@@ -4,7 +4,6 @@ import { NavLink, Outlet } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
-  Settings,
   LogOut,
   Menu,
   Shield,
@@ -107,16 +106,6 @@ export default function AdminLayout() {
             >
               <MessageCircleMore className="h-5 w-5" />
               <span>Messages</span>
-            </NavLink>
-
-            <NavLink
-              to="/admin/settings"
-              className={({ isActive }) =>
-                `${navItem} ${isActive ? active : muted}`
-              }
-            >
-              <Settings className="h-5 w-5" />
-              <span>Settings</span>
             </NavLink>
 
             {/* Go back home */}

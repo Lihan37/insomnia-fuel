@@ -1,5 +1,6 @@
 // src/components/Hero.tsx
 import React, { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import GlowSkeleton from "./GlowSkeleton";
 
@@ -7,6 +8,14 @@ import resPic from "../assets/res pic.jpeg"; // ✅ your restaurant image
 
 const Hero: React.FC = () => {
   const [imgLoaded, setImgLoaded] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
+  const slideLeft = shouldReduceMotion
+    ? { opacity: 1, x: 0 }
+    : { opacity: 0, x: -40 };
+  const slideRight = shouldReduceMotion
+    ? { opacity: 1, x: 0 }
+    : { opacity: 0, x: 40 };
+  const slideInView = { opacity: 1, x: 0 };
 
   return (
     <section className="relative w-full overflow-hidden bg-base text-text">
@@ -21,7 +30,13 @@ const Hero: React.FC = () => {
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 px-4 py-16 md:grid-cols-2 md:py-24 lg:gap-16">
         
         {/* LEFT AREA */}
-        <div className="flex flex-col justify-center">
+        <motion.div
+          className="flex flex-col justify-center"
+          initial={slideLeft}
+          whileInView={slideInView}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
+        >
 
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#B08A5A]">
             Parramatta • All Day Café & Burgers
@@ -74,10 +89,16 @@ const Hero: React.FC = () => {
           <div className="mt-6 text-sm text-[#7A6A53]">
             Rated 4.9★ by day dwellers & night owls • Dine-in, pickup & delivery
           </div>
-        </div>
+        </motion.div>
 
         {/* RIGHT — IMAGE ONLY */}
-        <div className="relative">
+        <motion.div
+          className="relative md:translate-y-6"
+          initial={slideRight}
+          whileInView={slideInView}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.7, ease: "easeOut", delay: 0.1 }}
+        >
           <div className="aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
             
             {!imgLoaded && (
@@ -101,7 +122,7 @@ const Hero: React.FC = () => {
                 "conic-gradient(from 180deg at 50% 50%, rgba(255,216,210,0.10), transparent 45%, rgba(255,216,210,0.10))",
             }}
           />
-        </div>
+        </motion.div>
       </div>
     </section>
   );
