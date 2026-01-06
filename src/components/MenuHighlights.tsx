@@ -43,8 +43,11 @@ const menuItems: MenuItem[] = [
 
 const MenuHighlights: React.FC = () => {
   const shouldReduceMotion = useReducedMotion();
-  const introInitial = shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 };
+  const introInitial = shouldReduceMotion
+    ? { opacity: 1, y: 0 }
+    : { opacity: 0, y: 18 };
   const introInView = { opacity: 1, y: 0 };
+  const easeOut = [0.16, 1, 0.3, 1] as const;
   const gridVariants = {
     hidden: {},
     show: {
@@ -53,7 +56,11 @@ const MenuHighlights: React.FC = () => {
   };
   const cardVariants = {
     hidden: shouldReduceMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 18 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: easeOut },
+    },
   };
 
   return (
@@ -67,7 +74,7 @@ const MenuHighlights: React.FC = () => {
         initial={introInitial}
         whileInView={introInView}
         viewport={{ once: true, amount: 0.6 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
+        transition={{ duration: 0.7, ease: easeOut }}
       >
         <h2 className="text-4xl font-bold tracking-tight md:text-5xl">
           <span className="text-[#350404]">Signature</span>{" "}
@@ -118,7 +125,7 @@ const MenuHighlights: React.FC = () => {
         initial={introInitial}
         whileInView={introInView}
         viewport={{ once: true, amount: 0.6 }}
-        transition={{ duration: 0.7, ease: "easeOut", delay: 0.05 }}
+        transition={{ duration: 0.7, ease: easeOut, delay: 0.05 }}
       >
         <Link
           to="/menu"
