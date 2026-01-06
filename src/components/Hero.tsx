@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import GlowSkeleton from "./GlowSkeleton";
 
-import resPic from "../assets/res pic.png"; // ✅ your restaurant image
+import resPic from "../assets/res pic.jpeg"; // ✅ your restaurant image
 
 const Hero: React.FC = () => {
   const [imgLoaded, setImgLoaded] = useState(false);
