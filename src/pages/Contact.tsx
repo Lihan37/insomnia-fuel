@@ -99,10 +99,10 @@ export default function Contact() {
               <li>
                 📞{" "}
                 <a
-                  href="tel:00000"
+                  href="tel:0295681401"
                   className="hover:text-[#350404] transition-colors"
                 >
-                  00000
+                  (02) 9568 1401
                 </a>
               </li>
               <li>
@@ -114,7 +114,7 @@ export default function Contact() {
                   insomniafuel12@gmail.com
                 </a>
               </li>
-              <li>🕓 Mon – Sun : 4 PM – 2 AM</li>
+              <li>Monday to Friday - 6am to 5pm</li>
             </ul>
 
             {/* Map embed */}
@@ -184,3 +184,4 @@ export default function Contact() {
     </section>
   );
 }
+

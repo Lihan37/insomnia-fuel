@@ -32,7 +32,7 @@ const Hero: React.FC = () => {
           </h1>
 
           <p className="mt-4 max-w-xl text-lg md:text-xl leading-relaxed text-[#5C5C5C]">
-            From your first coffee to your late-afternoon burger — serving comfort, flavour and good energy all day at Insomnia Fuel.
+            From your first coffee to your late-afternoon snacks — serving comfort, flavour and good energy all day at Insomnia Fuel.
           </p>
 
           {/* BADGES */}
@@ -41,7 +41,7 @@ const Hero: React.FC = () => {
               Specialty Coffee
             </span>
             <span className="rounded-full border border-border/80 bg-white/80 px-3 py-1">
-              Smash Burgers
+              Deli Sandwiches
             </span>
             <span className="rounded-full border border-border/80 bg-white/80 px-3 py-1">
               Brunch & Late Lunch
