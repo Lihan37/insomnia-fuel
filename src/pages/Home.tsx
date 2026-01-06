@@ -10,6 +10,8 @@ const localBusinessSchema = {
   name: "Insomnia Fuel",
   description:
     "Late-night cafe in Parramatta serving smash burgers, specialty coffee, and comfort food.",
+  url: "https://insomniafuel.com.au",
+  telephone: "+61 2 9568 1401",
   areaServed: "Parramatta NSW",
   address: {
     "@type": "PostalAddress",
@@ -17,6 +19,14 @@ const localBusinessSchema = {
     addressRegion: "NSW",
     addressCountry: "AU",
   },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "06:00",
+      closes: "17:00",
+    },
+  ],
   servesCuisine: ["Coffee", "Burgers", "Brunch"],
 };
 
