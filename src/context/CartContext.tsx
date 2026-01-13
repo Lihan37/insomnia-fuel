@@ -42,6 +42,44 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
+  const playOrderSound = () => {
+    if (typeof window === "undefined") return;
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioCtx) return;
+
+    try {
+      const ctx = new AudioCtx();
+      const gain = ctx.createGain();
+      gain.gain.value = 0.15;
+      gain.connect(ctx.destination);
+
+      const now = ctx.currentTime;
+      const osc1 = ctx.createOscillator();
+      osc1.type = "sine";
+      osc1.frequency.setValueAtTime(880, now);
+      osc1.frequency.exponentialRampToValueAtTime(660, now + 0.2);
+      osc1.connect(gain);
+
+      const osc2 = ctx.createOscillator();
+      osc2.type = "sine";
+      osc2.frequency.setValueAtTime(1320, now);
+      osc2.frequency.exponentialRampToValueAtTime(990, now + 0.2);
+      osc2.connect(gain);
+
+      osc1.start(now);
+      osc2.start(now);
+      osc1.stop(now + 0.25);
+      osc2.stop(now + 0.25);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+
+      osc2.onended = () => {
+        ctx.close().catch(() => undefined);
+      };
+    } catch (err) {
+      console.error("Failed to play order sound:", err);
+    }
+  };
+
   // ---------- Initial load (after auth is known) ----------
   useEffect(() => {
     const hydrate = async () => {
@@ -246,13 +284,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
         window.localStorage.removeItem(GUEST_STORAGE_KEY);
       }
 
-      if (orderId) {
-        window.location.href = `/order/placed?orderId=${encodeURIComponent(
-          orderId
-        )}`;
-      } else {
-        window.location.href = "/order/placed";
-      }
+      playOrderSound();
+      const target = orderId
+        ? `/order/placed?orderId=${encodeURIComponent(orderId)}`
+        : "/order/placed";
+      setTimeout(() => {
+        window.location.href = target;
+      }, 200);
     } catch (err) {
       console.error("Error placing order", err);
       alert("Failed to place your order. Please try again.");

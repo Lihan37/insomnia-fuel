@@ -1,4 +1,4 @@
-// src/pages/admin/AdminLayout.tsx
+﻿// src/pages/admin/AdminLayout.tsx
 import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import {
@@ -10,7 +10,7 @@ import {
   Home,
   UtensilsCrossed,
   ReceiptText,
-  MessageCircleMore,        // 👈 NEW
+  MessageCircleMore,        // ðŸ‘ˆ NEW
 } from "lucide-react";
 
 const navItem =
@@ -97,7 +97,7 @@ export default function AdminLayout() {
               <span>Orders</span>
             </NavLink>
 
-            {/* 👇 NEW: Messages */}
+            {/* ðŸ‘‡ NEW: Messages */}
             <NavLink
               to="/admin/messages"
               className={({ isActive }) =>
@@ -124,7 +124,7 @@ export default function AdminLayout() {
 
           {/* Footer info */}
           <div className="mt-6 rounded-xl bg-white/10 p-3 text-xs text-white/80">
-            Parramatta, NSW • v1.0
+            Sydney CBD, NSW - v1.0
           </div>
 
           {/* Logout */}
@@ -178,3 +178,5 @@ export default function AdminLayout() {
     </div>
   );
 }
+
+

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import type { IMenuItem, MenuCategory } from "@/types/menu";
 import { Loader2, Star } from "lucide-react";
@@ -102,14 +102,14 @@ export default function Menu() {
     <section className="bg-[#FFF7EC]">
       <SEO
         title="Menu"
-        description="Explore the all-day menu at Insomnia Fuel in Parramatta: burgers, coffee, breakfast, wraps, and shakes."
+        description="Explore the all-day menu at Insomnia Fuel in Sydney CBD: burgers, coffee, breakfast, wraps, and shakes."
         image="/logo.png"
       />
       <div className="max-w-6xl mx-auto px-4 py-14 md:py-20">
         {/* Hero */}
         <div className="flex flex-col items-center text-center mb-10 md:mb-14 space-y-6">
           <div className="inline-flex items-center justify-center rounded-full border border-amber-200 bg-white/80 px-5 py-2 shadow-sm backdrop-blur-sm transition-transform duration-500 hover:-translate-y-0.5">
-            <span className="text-xl mr-2">☕</span>
+            <span className="text-xl mr-2">â˜•</span>
             <span className="text-xs tracking-[0.25em] uppercase text-[#6B4A2F]">
               Crafted With Insomnia Fuel
             </span>
@@ -124,7 +124,7 @@ export default function Menu() {
           <div className="flex items-center w-full max-w-3xl">
             <span className="flex-1 h-px bg-gradient-to-r from-transparent via-amber-200 to-amber-400" />
             <span className="mx-3 text-2xl md:text-3xl transition-transform duration-700 hover:rotate-6">
-              ☕
+              â˜•
             </span>
             <span className="flex-1 h-px bg-gradient-to-l from-transparent via-amber-200 to-amber-400" />
           </div>
@@ -166,7 +166,7 @@ export default function Menu() {
           <div className="flex items-center justify-center py-16">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 shadow-sm border border-neutral-200">
               <Loader2 className="h-4 w-4 animate-spin text-[#1E2B4F]" />
-              <span className="text-sm text-neutral-700">Brewing menu…</span>
+              <span className="text-sm text-neutral-700">Brewing menuâ€¦</span>
             </div>
           </div>
         ) : err ? (
@@ -289,7 +289,7 @@ export default function Menu() {
                               {item.category}
                             </span>
                             <span className="text-[10px] text-neutral-400 group-hover:text-neutral-600 transition-colors">
-                              Served all day · Fresh
+                              Served all day Â· Fresh
                             </span>
                           </div>
                         </article>
@@ -316,3 +316,4 @@ export default function Menu() {
     </section>
   );
 }
+

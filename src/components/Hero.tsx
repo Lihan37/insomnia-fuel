@@ -39,7 +39,7 @@ const Hero: React.FC = () => {
         >
 
           <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#B08A5A]">
-            Parramatta • All Day Café & Burgers
+            Sydney CBD • All Day Café & Burgers
           </p>
 
           <h1 className="mt-3 text-balance text-4xl font-extrabold leading-tight tracking-tight text-[#1E1E1E] md:text-6xl">

@@ -1,4 +1,4 @@
-// src/pages/Contact.tsx
+﻿// src/pages/Contact.tsx
 import { useState } from "react";
 import Swal from "sweetalert2";
 import { api } from "@/lib/api";
@@ -24,7 +24,7 @@ export default function Contact() {
     try {
       setLoading(true);
 
-      // Optional: use logged-in user’s email/name if not filled
+      // Optional: use logged-in userâ€™s email/name if not filled
       const payload = {
         name: form.name || user?.displayName || "Guest",
         email: form.email || user?.email || "",
@@ -39,7 +39,7 @@ export default function Contact() {
       await Swal.fire({
         icon: "success",
         title: "Message sent!",
-        text: "Thanks for reaching out. We’ll get back to you soon.",
+        text: "Thanks for reaching out. Weâ€™ll get back to you soon.",
         timer: 1600,
         showConfirmButton: false,
       });
@@ -52,7 +52,7 @@ export default function Contact() {
         title: "Something went wrong",
         text:
           err?.response?.data?.message ||
-          "We couldn’t send your message. Please try again.",
+          "We couldnâ€™t send your message. Please try again.",
       });
     } finally {
       setLoading(false);
@@ -63,7 +63,7 @@ export default function Contact() {
     <section className="relative py-20 overflow-hidden text-[#1E1E1E]">
       <SEO
         title="Contact"
-        description="Find Insomnia Fuel in Parramatta. Get directions, opening hours, and contact the cafe."
+        description="Contact Insomnia Fuel in Sydney CBD at Shop-2, 60 Park Street, Sydney, NSW 2000 or call (02) 9568 1401."
         image="/logo.png"
       />
       {/* Subtle warm background tint */}
@@ -90,14 +90,14 @@ export default function Contact() {
             </h2>
             <p className="text-[#5C5C5C] mb-6 leading-relaxed">
               <span className="font-semibold text-[#1E1E1E]">Insomnia Fuel</span>{" "}
-              — where burgers, brews, and creativity meet the night. We’re open
+              â€” where burgers, brews, and creativity meet the night. Weâ€™re open
               until late every evening.
             </p>
 
             <ul className="space-y-2 text-sm text-[#5C5C5C]">
-              <li>📍 Shop-2, 60 Park Street, Sydney, NSW 2000</li>
+              <li>ðŸ“ Shop-2, 60 Park Street, Sydney, NSW 2000</li>
               <li>
-                📞{" "}
+                ðŸ“ž{" "}
                 <a
                   href="tel:0295681401"
                   className="hover:text-[#350404] transition-colors"
@@ -106,7 +106,7 @@ export default function Contact() {
                 </a>
               </li>
               <li>
-                ✉️{" "}
+                âœ‰ï¸{" "}
                 <a
                   href="mailto:insomniafuel12@gmail.com"
                   className="hover:text-[#350404] transition-colors"
@@ -174,7 +174,7 @@ export default function Contact() {
                 {loading
                   ? "Sending..."
                   : submitted
-                  ? "Message Sent ✓"
+                  ? "Message Sent âœ“"
                   : "Send Message"}
               </button>
             </form>
@@ -184,4 +184,5 @@ export default function Contact() {
     </section>
   );
 }
+
 

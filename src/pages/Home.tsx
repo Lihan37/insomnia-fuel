@@ -1,4 +1,4 @@
-// src/pages/Home.tsx
+﻿// src/pages/Home.tsx
 import Hero from "../components/Hero";
 import MenuHighlights from "../components/MenuHighlights";
 import JourneyTimeline from "../components/JourneyTimeline";
@@ -9,14 +9,16 @@ const localBusinessSchema = {
   "@type": "CafeOrCoffeeShop",
   name: "Insomnia Fuel",
   description:
-    "Late-night cafe in Parramatta serving smash burgers, specialty coffee, and comfort food.",
+    "Late-night cafe in Sydney CBD serving smash burgers, specialty coffee, and comfort food.",
   url: "https://insomniafuel.com.au",
   telephone: "+61 2 9568 1401",
-  areaServed: "Parramatta NSW",
+  areaServed: "Sydney CBD NSW",
   address: {
     "@type": "PostalAddress",
-    addressLocality: "Parramatta",
+    streetAddress: "Shop-2, 60 Park Street",
+    addressLocality: "Sydney",
     addressRegion: "NSW",
+    postalCode: "2000",
     addressCountry: "AU",
   },
   openingHoursSpecification: [
@@ -35,8 +37,8 @@ export default function Home() {
     <>
       {/* SEO meta tags */}
       <SEO
-        title="Cafe in Parramatta"
-        description="Late-night cafe in Parramatta for smash burgers, espresso, and comfort food at Insomnia Fuel."
+        title="Insomnia Fuel | Cafe in Sydney CBD"
+        description="Late-night cafe in Sydney CBD for smash burgers, espresso, and comfort food at Insomnia Fuel."
         image="/logo.png"
         schema={localBusinessSchema}
       />
@@ -54,3 +56,5 @@ export default function Home() {
     </>
   );
 }
+
+

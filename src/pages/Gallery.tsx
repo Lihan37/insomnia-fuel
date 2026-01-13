@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+﻿import { useEffect, useMemo, useRef, useState } from "react";
 import SEO from "@/components/SEO";
 import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
@@ -170,7 +170,7 @@ export default function Gallery() {
     <section className="relative overflow-hidden bg-[#f7f0e2] text-[#1E1B17]">
       <SEO
         title="Gallery"
-        description="See the atmosphere at Insomnia Fuel, a cafe in Parramatta with bold coffee and comfort food."
+        description="See the atmosphere at Insomnia Fuel, a cafe in Sydney CBD with bold coffee and comfort food."
         image="/logo.png"
       />
 
@@ -337,3 +337,4 @@ export default function Gallery() {
     </section>
   );
 }
+

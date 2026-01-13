@@ -1,4 +1,4 @@
-// src/components/SEO.tsx
+﻿// src/components/SEO.tsx
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
@@ -13,7 +13,7 @@ type Props = {
 
 const SITE_NAME = "Insomnia Fuel";
 const DEFAULT_DESCRIPTION =
-  "Late-night cafe in Parramatta serving smash burgers, specialty coffee, and comfort food.";
+  "Late-night cafe in Sydney CBD serving smash burgers, specialty coffee, and comfort food.";
 const DEFAULT_IMAGE = "/logo.png";
 const DEFAULT_LOCALE = "en_AU";
 
@@ -114,3 +114,4 @@ export default function SEO({
 
   return null;
 }
+
