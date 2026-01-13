@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 interface MobileMenuProps {
   open: boolean;
   setOpen: (open: boolean) => void;
+  pendingAdminOrders?: number;
 }
 
 const baseLinks = [
@@ -17,7 +18,11 @@ const baseLinks = [
   { to: "/contact", label: "Contact" },
 ];
 
-export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
+export default function MobileMenu({
+  open,
+  setOpen,
+  pendingAdminOrders = 0,
+}: MobileMenuProps) {
   const { user, isAdmin, isClient, logout } = useAuth();
 
   // Same order logic as Navbar
@@ -88,9 +93,16 @@ export default function MobileMenu({ open, setOpen }: MobileMenuProps) {
                 <Link
                   to="/admin"
                   onClick={() => setOpen(false)}
-                  className="text-lg font-medium tracking-wide hover:text-orange-400 transition"
+                  className="text-lg font-medium tracking-wide hover:text-orange-400 transition relative"
                 >
-                  Admin
+                  <span className="relative inline-flex items-center justify-center">
+                    Admin
+                    {pendingAdminOrders > 0 && (
+                      <span className="absolute -top-2 -right-4 min-w-[18px] rounded-full bg-orange-500 px-1 text-[10px] font-semibold leading-[18px] text-white text-center">
+                        {pendingAdminOrders}
+                      </span>
+                    )}
+                  </span>
                 </Link>
               )}
 

@@ -1,10 +1,12 @@
 // src/components/Navbar.tsx
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import logo from "../assets/logo.png";
 import MobileMenu from "./MobileMenu";
 import { useAuth } from "@/context/AuthContext";
+import { api } from "@/lib/api";
+import type { IOrder } from "@/types/order";
 
 type NavLinkItem = { to: string; label: string; hidden?: boolean };
 
@@ -18,6 +20,7 @@ const links: NavLinkItem[] = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [shadow, setShadow] = useState(false);
+  const [pendingOrders, setPendingOrders] = useState(0);
   const location = useLocation();
 
   const { user, isAdmin, isClient, logout } = useAuth();
@@ -28,6 +31,43 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const fetchPendingOrders = useCallback(async () => {
+    if (!user || !isAdmin) {
+      setPendingOrders(0);
+      return;
+    }
+
+    try {
+      const token = await user.getIdToken();
+      const res = await api.get<{ items: IOrder[] }>("/api/orders", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const nextCount = (res.data.items || []).filter(
+        (order) => order.status === "pending"
+      ).length;
+      setPendingOrders(nextCount);
+    } catch (err) {
+      console.error("Failed to load pending orders:", err);
+    }
+  }, [user, isAdmin]);
+
+  useEffect(() => {
+    if (!isAdmin) {
+      setPendingOrders(0);
+      return;
+    }
+    fetchPendingOrders();
+    const id = setInterval(fetchPendingOrders, 60000);
+    return () => clearInterval(id);
+  }, [fetchPendingOrders, isAdmin]);
+
+  useEffect(() => {
+    if (!isAdmin) return;
+    const handler = () => fetchPendingOrders();
+    window.addEventListener("orders-updated", handler);
+    return () => window.removeEventListener("orders-updated", handler);
+  }, [fetchPendingOrders, isAdmin]);
 
   const linkClass = ({ isActive }: { isActive: boolean }) =>
     `relative px-3 py-2 text-[15px] font-medium transition-colors ${
@@ -69,9 +109,18 @@ export default function Navbar() {
               {isAdmin && (
                 <NavLink
                   to="/admin"
-                  className={`${linkClass} whitespace-nowrap`}
+                  className={({ isActive }) =>
+                    `${linkClass({ isActive })} whitespace-nowrap`
+                  }
                 >
-                  Admin
+                  <span className="relative inline-flex items-center">
+                    Admin
+                    {pendingOrders > 0 && (
+                      <span className="absolute -top-2 -right-3 min-w-[18px] rounded-full bg-[#790808] px-1 text-[10px] font-semibold leading-[18px] text-white text-center">
+                        {pendingOrders}
+                      </span>
+                    )}
+                  </span>
                 </NavLink>
               )}
               {isClient && (
@@ -130,7 +179,11 @@ export default function Navbar() {
       </header>
 
       {/* Mobile menu mirrors role links and button order */}
-      <MobileMenu open={open} setOpen={setOpen} />
+      <MobileMenu
+        open={open}
+        setOpen={setOpen}
+        pendingAdminOrders={pendingOrders}
+      />
     </>
   );
 }
