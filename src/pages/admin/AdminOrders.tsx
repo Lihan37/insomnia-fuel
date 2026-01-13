@@ -4,6 +4,7 @@ import {
   useState,
   useMemo,
   useCallback,
+  useRef,
 } from "react";
 import { api } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
@@ -20,6 +21,7 @@ import {
   AlertTriangle,
 } from "lucide-react";
 import Swal from "sweetalert2"; 
+import notificationSound from "@/assets/Notification Sound.wav";
 
 type StatusTab = "all" | OrderStatus;
 type DateFilter = "all" | "today" | "7days";
@@ -91,11 +93,39 @@ export default function AdminOrders() {
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const notificationRef = useRef<HTMLAudioElement | null>(null);
+  const hasLoadedRef = useRef(false);
+  const prevOrderIdsRef = useRef<Set<string>>(new Set());
 
   const [searchTerm, setSearchTerm] = useState("");
   const [dateFilter, setDateFilter] = useState<DateFilter>("all");
   const [sortBy, setSortBy] = useState<SortBy>("newest");
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const audio = new Audio(notificationSound);
+    audio.preload = "auto";
+    audio.volume = 0.6;
+    notificationRef.current = audio;
+    return () => {
+      notificationRef.current = null;
+    };
+  }, []);
+
+  const playNotificationSound = useCallback(() => {
+    const audio = notificationRef.current;
+    if (!audio) return;
+    try {
+      audio.currentTime = 0;
+      const playPromise = audio.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => undefined);
+      }
+    } catch (error) {
+      console.error("Failed to play notification sound:", error);
+    }
+  }, []);
 
   const fetchOrders = useCallback(
     async (opts?: { silent?: boolean }) => {
@@ -106,6 +136,8 @@ export default function AdminOrders() {
         if (!user) {
           setOrders([]);
           setErr("You must be logged in as admin to view orders.");
+          hasLoadedRef.current = false;
+          prevOrderIdsRef.current = new Set();
           return;
         }
 
@@ -114,7 +146,17 @@ export default function AdminOrders() {
           headers: { Authorization: `Bearer ${token}` },
         });
 
-        setOrders(res.data.items || []);
+        const nextItems = res.data.items || [];
+        if (hasLoadedRef.current) {
+          const prevIds = prevOrderIdsRef.current;
+          const hasNewOrder = nextItems.some((order) => !prevIds.has(order._id));
+          if (hasNewOrder) {
+            playNotificationSound();
+          }
+        }
+        prevOrderIdsRef.current = new Set(nextItems.map((order) => order._id));
+        hasLoadedRef.current = true;
+        setOrders(nextItems);
       } catch (error) {
         console.error(error);
         setErr("Failed to load orders.");
@@ -122,7 +164,7 @@ export default function AdminOrders() {
         if (!opts?.silent) setLoading(false);
       }
     },
-    [user]
+    [user, playNotificationSound]
   );
 
   useEffect(() => {
