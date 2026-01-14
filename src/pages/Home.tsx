@@ -37,7 +37,7 @@ export default function Home() {
     <>
       {/* SEO meta tags */}
       <SEO
-        title="Insomnia Fuel | Cafe in Sydney CBD"
+        title="Insomnia Fuel – Cafe in Sydney CBD"
         description="Late-night cafe in Sydney CBD for smash burgers, espresso, and comfort food at Insomnia Fuel."
         image="/logo.png"
         schema={localBusinessSchema}
