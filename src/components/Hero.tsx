@@ -107,7 +107,7 @@ const Hero: React.FC = () => {
 
             <img
               src={resPic}
-              alt="Insomnia Fuel Parramatta"
+              alt="Insomnia Fuel Sydney CBD"
               className={`h-full w-full object-cover transition-opacity duration-300 ${
                 imgLoaded ? "opacity-100" : "opacity-0"
               }`}
