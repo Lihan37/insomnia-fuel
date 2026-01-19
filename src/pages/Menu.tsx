@@ -1,7 +1,7 @@
 ﻿import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import type { IMenuItem, MenuCategory } from "@/types/menu";
-import { Loader2, Star } from "lucide-react";
+import { Coffee, Loader2, Star } from "lucide-react";
 import SEO from "@/components/SEO";
 
 type TabId = "all" | MenuCategory;
@@ -16,11 +16,20 @@ const tabs: { id: TabId; label: string }[] = [
   { id: "other", label: "Other" },
 ];
 
-const prettySection = (label: string) =>
-  label
+const prettySection = (label: string) => {
+  const trimmed = label.trim();
+  const compact = trimmed.replace(/\s+/g, "").toLowerCase();
+  if (compact === "delisandwiches") {
+    return "DELI\u00A0\u00A0SANDWICHES";
+  }
+  if (compact === "healthybowls") {
+    return "HEALTHY\u00A0\u00A0BOWLS";
+  }
+  return trimmed
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/([A-Z])([A-Z][a-z])/g, "$1 $2")
     .trim();
+};
 
 function getDisplayPrice(item: IMenuItem) {
   // if size pricing exists -> show "From"
@@ -109,7 +118,7 @@ export default function Menu() {
         {/* Hero */}
         <div className="flex flex-col items-center text-center mb-10 md:mb-14 space-y-6">
           <div className="inline-flex items-center justify-center rounded-full border border-amber-200 bg-white/80 px-5 py-2 shadow-sm backdrop-blur-sm transition-transform duration-500 hover:-translate-y-0.5">
-            <span className="text-xl mr-2">â˜•</span>
+            <Coffee className="mr-2 h-4 w-4 text-[#6B4A2F]" aria-hidden="true" />
             <span className="text-xs tracking-[0.25em] uppercase text-[#6B4A2F]">
               Crafted With Insomnia Fuel
             </span>
@@ -123,9 +132,10 @@ export default function Menu() {
 
           <div className="flex items-center w-full max-w-3xl">
             <span className="flex-1 h-px bg-gradient-to-r from-transparent via-amber-200 to-amber-400" />
-            <span className="mx-3 text-2xl md:text-3xl transition-transform duration-700 hover:rotate-6">
-              â˜•
-            </span>
+            <Coffee
+              className="mx-3 h-5 w-5 text-[#6B4A2F] transition-transform duration-700 hover:rotate-6 md:h-6 md:w-6"
+              aria-hidden="true"
+            />
             <span className="flex-1 h-px bg-gradient-to-l from-transparent via-amber-200 to-amber-400" />
           </div>
 
@@ -178,7 +188,7 @@ export default function Menu() {
             No items found in this category yet.
           </div>
         ) : (
-          <div className="space-y-10 md:space-y-12">
+          <div className="mt-6 space-y-10 md:space-y-12">
             {Object.entries(groupedBySection).map(
               ([section, sectionItems], i) => (
                 <div
