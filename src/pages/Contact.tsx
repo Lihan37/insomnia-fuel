@@ -24,7 +24,7 @@ export default function Contact() {
     try {
       setLoading(true);
 
-      // Optional: use logged-in userâ€™s email/name if not filled
+      // Optional: use logged-in user's email/name if not filled
       const payload = {
         name: form.name || user?.displayName || "Guest",
         email: form.email || user?.email || "",
@@ -39,7 +39,7 @@ export default function Contact() {
       await Swal.fire({
         icon: "success",
         title: "Message sent!",
-        text: "Thanks for reaching out. Weâ€™ll get back to you soon.",
+        text: "Thanks for reaching out. We'll get back to you soon.",
         timer: 1600,
         showConfirmButton: false,
       });
@@ -52,7 +52,7 @@ export default function Contact() {
         title: "Something went wrong",
         text:
           err?.response?.data?.message ||
-          "We couldnâ€™t send your message. Please try again.",
+          "We couldn't send your message. Please try again.",
       });
     } finally {
       setLoading(false);
@@ -90,14 +90,14 @@ export default function Contact() {
             </h2>
             <p className="text-[#5C5C5C] mb-6 leading-relaxed">
               <span className="font-semibold text-[#1E1E1E]">Insomnia Fuel</span>{" "}
-              â€” where burgers, brews, and creativity meet the night. Weâ€™re open
+              -- where burgers, brews, and creativity meet the night. We're open
               until late every evening.
             </p>
 
             <ul className="space-y-2 text-sm text-[#5C5C5C]">
-              <li>ðŸ“ Shop-2, 60 Park Street, Sydney, NSW 2000</li>
+              <li>Address: Shop-2, 60 Park Street, Sydney, NSW 2000</li>
               <li>
-                ðŸ“ž{" "}
+                Phone:{" "}
                 <a
                   href="tel:0295681401"
                   className="hover:text-[#350404] transition-colors"
@@ -106,7 +106,7 @@ export default function Contact() {
                 </a>
               </li>
               <li>
-                âœ‰ï¸{" "}
+                Email:{" "}
                 <a
                   href="mailto:insomniafuel12@gmail.com"
                   className="hover:text-[#350404] transition-colors"
@@ -174,7 +174,7 @@ export default function Contact() {
                 {loading
                   ? "Sending..."
                   : submitted
-                  ? "Message Sent âœ“"
+                  ? "Message Sent!"
                   : "Send Message"}
               </button>
             </form>

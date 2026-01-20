@@ -71,6 +71,7 @@ const Order = () => {
   const [err, setErr] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabId>("all");
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [placingOrder, setPlacingOrder] = useState(false);
 
   const {
     items: cartItems,
@@ -139,6 +140,16 @@ const Order = () => {
     () => cartItems.reduce((sum, i) => sum + i.quantity, 0),
     [cartItems]
   );
+
+  const handlePlaceOrder = async () => {
+    if (placingOrder) return;
+    setPlacingOrder(true);
+    try {
+      await placeOrder();
+    } finally {
+      setPlacingOrder(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -440,11 +451,16 @@ const Order = () => {
                 </div>
 
                 <button
-                  onClick={placeOrder}
-                  disabled={total === 0}
+                  onClick={handlePlaceOrder}
+                  disabled={total === 0 || placingOrder}
                   className="w-full rounded-full bg-[#1E2B4F] py-2.5 text-sm font-semibold text-white hover:bg-[#263567] disabled:opacity-60"
                 >
-                  Place order
+                  <span className="inline-flex items-center justify-center gap-2">
+                    {placingOrder && (
+                      <Loader2 className="h-4 w-4 animate-spin text-white" />
+                    )}
+                    {placingOrder ? "Placing order..." : "Place order"}
+                  </span>
                 </button>
                 <p className="text-[11px] text-neutral-500 text-center">
                   Pay at the cafe when you collect your order.

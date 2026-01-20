@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
 import type { IMenuItem, MenuCategory } from "@/types/menu";
 import { Coffee, Loader2, Star } from "lucide-react";
@@ -176,7 +176,7 @@ export default function Menu() {
           <div className="flex items-center justify-center py-16">
             <div className="inline-flex items-center gap-2 rounded-full bg-white/90 px-4 py-2 shadow-sm border border-neutral-200">
               <Loader2 className="h-4 w-4 animate-spin text-[#1E2B4F]" />
-              <span className="text-sm text-neutral-700">Brewing menuâ€¦</span>
+              <span className="text-sm text-neutral-700">Brewing menu</span>
             </div>
           </div>
         ) : err ? (
@@ -299,7 +299,7 @@ export default function Menu() {
                               {item.category}
                             </span>
                             <span className="text-[10px] text-neutral-400 group-hover:text-neutral-600 transition-colors">
-                              Served all day Â· Fresh
+                              Served all day. Always fresh.
                             </span>
                           </div>
                         </article>
