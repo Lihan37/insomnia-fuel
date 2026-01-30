@@ -44,6 +44,7 @@ export const router = createBrowserRouter([
         element: <RequireAuth />,
         children: [
           { path: "/order", element: <Order /> },
+          { path: "/order/catering", element: <Order category="catering" /> },
           { path: "/order/placed", element: <OrderPlaced /> },
           { path: "/dashboard", element: <UserDashboard /> },
           { path: "/dashboard/order", element: <OrderDetails /> },

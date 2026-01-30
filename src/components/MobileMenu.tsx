@@ -26,8 +26,14 @@ export default function MobileMenu({
   const { user, isAdmin, isClient, logout } = useAuth();
 
   // Same order logic as Navbar
-  const orderTo = user ? "/order" : "/register";
-  const orderState = user ? undefined : { next: "/order" };
+  const orderLinks = [
+    { label: "Order Food", to: "/order" },
+    { label: "Catering Order", to: "/order/catering" },
+  ];
+  const getOrderLink = (path: string) => ({
+    to: user ? path : "/register",
+    state: user ? undefined : { next: path },
+  });
 
   // Lock body scroll when menu is open
   useEffect(() => {
@@ -115,19 +121,27 @@ export default function MobileMenu({
                   Activity
                 </Link>
               )}
+
+              <div className="pt-4 space-y-3">
+                {orderLinks.map((link, index) => (
+                  <Link
+                    key={link.to}
+                    {...getOrderLink(link.to)}
+                    onClick={() => setOpen(false)}
+                    className={
+                      index === 0
+                        ? "block w-full rounded-full bg-[#350404] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:shadow-md hover:bg-[#790808] transition text-center"
+                        : "block w-full rounded-full border border-gray-700 bg-transparent px-5 py-2.5 text-sm font-semibold text-gray-200 hover:border-orange-400 hover:text-orange-400 transition text-center"
+                    }
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
             </nav>
 
-            {/* CTA + Auth actions (match Navbar order) */}
+            {/* Auth actions */}
             <div className="px-6 pb-6 space-y-3 border-t border-gray-800">
-              <Link
-                to={orderTo}
-                state={orderState}
-                onClick={() => setOpen(false)}
-                className="block w-full rounded-full bg-[#350404] px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:shadow-md hover:bg-[#790808] transition text-center"
-              >
-                Order Online
-              </Link>
-
               {!user ? (
                 <Link
                   to="/login"

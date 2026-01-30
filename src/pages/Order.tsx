@@ -7,6 +7,10 @@ import { useCart } from "@/context/CartContext";
 
 type TabId = "all" | MenuCategory;
 
+type OrderProps = {
+  category?: "catering";
+};
+
 const tabs: { id: TabId; label: string }[] = [
   { id: "all", label: "All" },
   { id: "bowl", label: "Bowls" },
@@ -66,11 +70,12 @@ function filterByTab(items: IMenuItem[], activeTab: TabId) {
   return items.filter((item) => item.category === activeTab);
 }
 
-const Order = () => {
+const Order = ({ category }: OrderProps) => {
   const [items, setItems] = useState<IMenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<TabId>("all");
+  const initialTab: TabId = category ?? "all";
+  const [activeTab, setActiveTab] = useState<TabId>(initialTab);
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [placingOrder, setPlacingOrder] = useState(false);
 
@@ -87,7 +92,10 @@ const Order = () => {
     (async () => {
       try {
         setLoading(true);
-        const res = await api.get<{ items: IMenuItem[] }>("/api/menu");
+        const endpoint = category
+          ? `/api/menu?category=${encodeURIComponent(category)}`
+          : "/api/menu";
+        const res = await api.get<{ items: IMenuItem[] }>(endpoint);
         const sorted = [...(res.data.items || [])].sort((a, b) => {
           if (a.isFeatured && !b.isFeatured) return -1;
           if (!a.isFeatured && b.isFeatured) return 1;
@@ -104,7 +112,7 @@ const Order = () => {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [category]);
 
   const filtered = useMemo(
     () => filterByTab(items, activeTab),
@@ -171,21 +179,27 @@ const Order = () => {
     );
   }
 
+  const displayTabs =
+    category === "catering"
+      ? [{ id: "catering" as TabId, label: "Catering" }]
+      : tabs;
+
   return (
     <section className="bg-[#F7F0E8] min-h-[70vh]">
       <div className="max-w-6xl w-full mx-auto px-4 py-8 md:py-10">
         <h1 className="text-3xl md:text-4xl font-extrabold text-[#1E2B4F] tracking-tight mb-2">
-          Order Online
+          {category === "catering" ? "Catering Order" : "Order Online"}
         </h1>
         <p className="text-sm md:text-base text-neutral-700 mb-6 max-w-2xl">
-          Choose your platters, bowls and sandwiches. Adjust quantities and
-          we will keep a live total of your order.
+          {category === "catering"
+            ? "Choose your catering platters and adjust quantities as needed."
+            : "Choose your platters, bowls and sandwiches. Adjust quantities and we will keep a live total of your order."}
         </p>
 
         <div className="mb-6 -mx-4 px-4 md:mx-0 md:px-0">
           <div className="overflow-x-auto">
             <div className="inline-flex min-w-full md:min-w-0 gap-2 rounded-full bg-white px-2 py-2 border border-neutral-200 shadow-sm">
-              {tabs.map((tab) => {
+              {displayTabs.map((tab) => {
                 const isActive = activeTab === tab.id;
                 return (
                   <button

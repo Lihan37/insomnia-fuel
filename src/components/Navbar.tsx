@@ -1,7 +1,7 @@
 // src/components/Navbar.tsx
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Menu } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import logo from "../assets/logo.png";
 import MobileMenu from "./MobileMenu";
 import { useAuth } from "@/context/AuthContext";
@@ -21,15 +21,32 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [shadow, setShadow] = useState(false);
   const [pendingOrders, setPendingOrders] = useState(0);
+  const [orderMenuOpen, setOrderMenuOpen] = useState(false);
+  const orderMenuRef = useRef<HTMLDivElement | null>(null);
   const location = useLocation();
 
   const { user, isAdmin, isClient, logout } = useAuth();
 
-  useEffect(() => setOpen(false), [location.pathname]);
+  useEffect(() => {
+    setOpen(false);
+    setOrderMenuOpen(false);
+  }, [location.pathname]);
   useEffect(() => {
     const handleScroll = () => setShadow(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        orderMenuRef.current &&
+        !orderMenuRef.current.contains(event.target as Node)
+      ) {
+        setOrderMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const fetchPendingOrders = useCallback(async () => {
@@ -74,8 +91,14 @@ export default function Navbar() {
       isActive ? "text-[#790808]" : "text-neutral-800 hover:text-[#790808]"
     }`;
 
-  const orderTo = user ? "/order" : "/register";
-  const orderState = user ? undefined : { next: "/order" };
+  const orderLinks = [
+    { label: "Order Food", to: "/order" },
+    { label: "Catering Order", to: "/order/catering" },
+  ];
+  const getOrderLink = (path: string) => ({
+    to: user ? path : "/register",
+    state: user ? undefined : { next: path },
+  });
 
   return (
     <>
@@ -152,14 +175,41 @@ export default function Navbar() {
                 </button>
               )}
 
-              {/* Then the CTA */}
-              <Link
-                to={orderTo}
-                state={orderState}
-                className="hidden md:inline-block rounded-full bg-[#350404] px-5 py-2 text-sm font-semibold text-white shadow-sm hover:shadow-md hover:bg-[#790808] transition"
+              {/* Then the CTA (dropdown) */}
+              <div
+                ref={orderMenuRef}
+                className="relative hidden md:inline-flex"
               >
-                Order Online
-              </Link>
+                <button
+                  type="button"
+                  onClick={() => setOrderMenuOpen((prev) => !prev)}
+                  aria-haspopup="menu"
+                  aria-expanded={orderMenuOpen}
+                  className="inline-flex items-center gap-2 rounded-full bg-[#350404] px-5 py-2 text-sm font-semibold text-white shadow-sm hover:shadow-md hover:bg-[#790808] transition"
+                >
+                  Order Online
+                  <span className="text-[10px] opacity-80">▼</span>
+                </button>
+
+                {orderMenuOpen && (
+                  <div className="absolute right-0 top-full z-50 mt-1 min-w-full w-48 rounded-2xl border border-amber-100/80 bg-white/95 p-2 shadow-[0_16px_36px_-22px_rgba(30,20,10,0.6)] backdrop-blur-md">
+                    <div className="h-1.5 w-full rounded-full bg-[#350404] mb-1" />
+                    {orderLinks.map((link) => (
+                      <Link
+                        key={link.to}
+                        {...getOrderLink(link.to)}
+                        className="group flex items-center justify-between rounded-xl px-3 py-2 text-sm font-semibold text-[#1E2B4F] hover:bg-amber-50/90 transition"
+                        onClick={() => setOrderMenuOpen(false)}
+                      >
+                        <span>{link.label}</span>
+                        <span className="text-[10px] text-amber-700/70 opacity-0 transition group-hover:opacity-100">
+                          →
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Burger */}
               <button

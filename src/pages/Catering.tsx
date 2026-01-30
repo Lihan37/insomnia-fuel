@@ -59,7 +59,7 @@ export default function Catering() {
         image="/logo.png"
       />
       <div className="max-w-5xl mx-auto px-4 py-14 md:py-20">
-        <div className="flex flex-col items-center text-center mb-10 md:mb-14 space-y-6">
+        <div className="flex flex-col items-center text-center mb-6 md:mb-8 space-y-6">
           <div className="inline-flex items-center justify-center rounded-full border border-amber-200 bg-white/80 px-5 py-2 shadow-sm backdrop-blur-sm transition-transform duration-500 hover:-translate-y-0.5">
             <Coffee className="mr-2 h-4 w-4 text-[#6B4A2F]" aria-hidden="true" />
             <span className="text-xs tracking-[0.25em] uppercase text-[#6B4A2F]">
@@ -79,6 +79,15 @@ export default function Catering() {
             />
             <span className="flex-1 h-px bg-gradient-to-l from-transparent via-amber-200 to-amber-400" />
           </div>
+        </div>
+
+        <div className="mb-10 flex justify-center">
+          <Link
+            to="/order/catering"
+            className="inline-flex items-center justify-center rounded-full bg-[#350404] px-8 py-3 text-sm font-semibold text-white shadow-sm hover:shadow-md hover:bg-[#790808] transition"
+          >
+            Order Now
+          </Link>
         </div>
 
         {loading ? (
@@ -136,7 +145,7 @@ export default function Catering() {
 
         <div className="mt-12 flex justify-center">
           <Link
-            to="/order"
+            to="/order/catering"
             className="inline-flex items-center justify-center rounded-full bg-[#350404] px-8 py-3 text-sm font-semibold text-white shadow-sm hover:shadow-md hover:bg-[#790808] transition"
           >
             Order Now
