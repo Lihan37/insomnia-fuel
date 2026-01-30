@@ -14,6 +14,7 @@ const tabs: { id: TabId; label: string }[] = [
   { id: "wrap", label: "Wraps" },
   { id: "breakfast", label: "Breakfast" },
   { id: "drink", label: "Drinks" },
+  { id: "catering", label: "Catering" },
   { id: "other", label: "Other" },
 ];
 

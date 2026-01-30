@@ -6,7 +6,8 @@ export type MenuCategory =
   | "breakfast"
   | "drink"
   | "other"
-  | "addon"; // ✅ NEW: add-ons / extras
+  | "catering"
+  | "addon"; // add-ons / extras
 
 // ✅ Sub-item type for sub foods / options
 export interface IMenuSubItem {

@@ -11,6 +11,7 @@ const categories: { value: MenuCategory; label: string }[] = [
   { value: "wrap", label: "Wrap" },
   { value: "breakfast", label: "Breakfast" },
   { value: "drink", label: "Drink" },
+  { value: "catering", label: "Catering" },
   { value: "other", label: "Other" },
   { value: "addon", label: "Add-ons / Extras" },
 ];

@@ -12,7 +12,7 @@ type NavLinkItem = { to: string; label: string; hidden?: boolean };
 
 const links: NavLinkItem[] = [
   { to: "/menu", label: "Menu" },
-  { to: "/catering", label: "Catering", hidden: true },
+  { to: "/catering", label: "Catering" },
   { to: "/gallery", label: "Gallery" },
   { to: "/contact", label: "Contact" },
 ];
