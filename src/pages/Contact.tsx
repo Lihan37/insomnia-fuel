@@ -63,7 +63,7 @@ export default function Contact() {
     <section className="relative py-20 overflow-hidden text-[#1E1E1E]">
       <SEO
         title="Contact"
-        description="Contact Insomnia Fuel in Sydney CBD at Shop-2, 60 Park Street, Sydney, NSW 2000 or call (02) 9568 1401."
+        description="Contact Insomnia Fuel in Sydney CBD at Shop-2, 60 Park Street, Sydney, NSW 2000 or call +61 449 605 427."
         image="/logo.png"
       />
       {/* Subtle warm background tint */}
@@ -99,10 +99,10 @@ export default function Contact() {
               <li>
                 Phone:{" "}
                 <a
-                  href="tel:0295681401"
+                  href="tel:+61449605427"
                   className="hover:text-[#350404] transition-colors"
                 >
-                  (02) 9568 1401
+                  +61 449 605 427
                 </a>
               </li>
               <li>
