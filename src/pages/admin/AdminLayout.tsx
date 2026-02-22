@@ -10,8 +10,9 @@ import {
   Home,
   UtensilsCrossed,
   ReceiptText,
-  MessageCircleMore,        // ðŸ‘ˆ NEW
+  MessageCircleMore,
 } from "lucide-react";
+import { useLiveUnreadCount } from "@/hooks/useLiveUnreadCount";
 
 const navItem =
   "flex items-center gap-3 rounded-xl px-3 py-2 text-[15px] transition";
@@ -20,6 +21,9 @@ const active = "bg-white text-[#1E2B4F] shadow-sm hover:bg-white";
 
 export default function AdminLayout() {
   const [open, setOpen] = useState(false);
+  const { count: unreadLiveMessages } = useLiveUnreadCount({
+    forRole: "admin",
+  });
 
   return (
     <div className="min-h-screen bg-[#FAF5EF]">
@@ -105,7 +109,14 @@ export default function AdminLayout() {
               }
             >
               <MessageCircleMore className="h-5 w-5" />
-              <span>Messages</span>
+              <span className="inline-flex items-center gap-2">
+                Live Messages
+                {unreadLiveMessages > 0 && (
+                  <span className="min-w-[18px] rounded-full bg-[#f59e0b] px-1 text-[10px] font-semibold leading-[18px] text-[#1E2B4F] text-center">
+                    {unreadLiveMessages}
+                  </span>
+                )}
+              </span>
             </NavLink>
 
             {/* Go back home */}

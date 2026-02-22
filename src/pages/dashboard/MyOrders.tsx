@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { api } from "@/lib/api";
+import { useLiveUnreadCount } from "@/hooks/useLiveUnreadCount";
 
 type OrderItem = {
   name: string;
@@ -18,10 +19,12 @@ type Order = {
 
 function DashboardTabs() {
   const location = useLocation();
+  const { count: unreadCount } = useLiveUnreadCount({ forRole: "user" });
 
   const tabs = [
     { label: "Overview", href: "/dashboard" },
     { label: "My Orders", href: "/dashboard/my-orders" },
+    { label: "Live Chat", href: "/dashboard/live-chat" },
   ];
 
   return (
@@ -39,7 +42,14 @@ function DashboardTabs() {
                   : "border-transparent text-neutral-500 hover:text-[#3A2C20]"
               }`}
             >
-              {tab.label}
+              <span className="inline-flex items-center gap-2">
+                {tab.label}
+                {tab.href === "/dashboard/live-chat" && unreadCount > 0 && (
+                  <span className="min-w-[18px] rounded-full bg-[#790808] px-1 text-[10px] font-semibold leading-[18px] text-white text-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </span>
             </Link>
           );
         })}

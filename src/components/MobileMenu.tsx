@@ -9,6 +9,7 @@ interface MobileMenuProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   pendingAdminOrders?: number;
+  userLiveUnread?: number;
 }
 
 const baseLinks = [
@@ -22,6 +23,7 @@ export default function MobileMenu({
   open,
   setOpen,
   pendingAdminOrders = 0,
+  userLiveUnread = 0,
 }: MobileMenuProps) {
   const { user, isAdmin, isClient, logout } = useAuth();
 
@@ -118,7 +120,14 @@ export default function MobileMenu({
                   onClick={() => setOpen(false)}
                   className="text-lg font-medium tracking-wide hover:text-orange-400 transition"
                 >
-                  Activity
+                  <span className="relative inline-flex items-center justify-center">
+                    Activity
+                    {userLiveUnread > 0 && (
+                      <span className="absolute -top-2 -right-4 min-w-[18px] rounded-full bg-orange-500 px-1 text-[10px] font-semibold leading-[18px] text-white text-center">
+                        {userLiveUnread}
+                      </span>
+                    )}
+                  </span>
                 </Link>
               )}
 

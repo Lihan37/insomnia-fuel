@@ -22,6 +22,7 @@ import AdminMessages from "@/pages/admin/AdminMessages";   // dY`^ NEW
 import OrderPlaced from "@/pages/OrderPlaced";
 import MyOrders from "@/pages/dashboard/MyOrders";
 import OrderDetails from "@/pages/dashboard/OrderDetails";
+import LiveChat from "@/pages/dashboard/LiveChat";
 
 export const router = createBrowserRouter([
   // Public + customer area (with Main nav)
@@ -47,6 +48,7 @@ export const router = createBrowserRouter([
           { path: "/order/catering", element: <Order category="catering" /> },
           { path: "/order/placed", element: <OrderPlaced /> },
           { path: "/dashboard", element: <UserDashboard /> },
+          { path: "/dashboard/live-chat", element: <LiveChat /> },
           { path: "/dashboard/order", element: <OrderDetails /> },
           { path: "/dashboard/order/:orderId", element: <OrderDetails /> },
         ],

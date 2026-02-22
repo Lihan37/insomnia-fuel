@@ -7,6 +7,7 @@ import MobileMenu from "./MobileMenu";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api";
 import type { IOrder } from "@/types/order";
+import { useLiveUnreadCount } from "@/hooks/useLiveUnreadCount";
 
 type NavLinkItem = { to: string; label: string; hidden?: boolean };
 
@@ -26,6 +27,10 @@ export default function Navbar() {
   const location = useLocation();
 
   const { user, isAdmin, isClient, logout } = useAuth();
+  const { count: userLiveUnread } = useLiveUnreadCount({
+    forRole: "user",
+    enabled: isClient,
+  });
 
   useEffect(() => {
     setOpen(false);
@@ -149,9 +154,18 @@ export default function Navbar() {
               {isClient && (
                 <NavLink
                   to="/dashboard"
-                  className={`${linkClass} whitespace-nowrap`}
+                  className={({ isActive }) =>
+                    `${linkClass({ isActive })} whitespace-nowrap`
+                  }
                 >
-                  Activity
+                  <span className="relative inline-flex items-center">
+                    Activity
+                    {userLiveUnread > 0 && (
+                      <span className="absolute -top-2 -right-3 min-w-[18px] rounded-full bg-[#790808] px-1 text-[10px] font-semibold leading-[18px] text-white text-center">
+                        {userLiveUnread}
+                      </span>
+                    )}
+                  </span>
                 </NavLink>
               )}
             </nav>
@@ -233,6 +247,7 @@ export default function Navbar() {
         open={open}
         setOpen={setOpen}
         pendingAdminOrders={pendingOrders}
+        userLiveUnread={userLiveUnread}
       />
     </>
   );
