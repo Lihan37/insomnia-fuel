@@ -77,6 +77,9 @@ export default function Footer() {
           Copyright {new Date().getFullYear()}{" "}
           <span className="font-medium text-[#1E1E1E]">Insomnia Fuel</span>.
           All rights reserved.
+          <br />
+          Developed by <span className="font-medium text-[#1E1E1E]">Eanur Rahman</span>{" "}
+          | Contact: eanurlihan10@gmail.com
         </div>
       </div>
     </footer>
